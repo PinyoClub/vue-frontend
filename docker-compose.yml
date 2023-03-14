@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: development
+    image: pinyoclub/frontend:dev
+    container_name: pc-frontend
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    environment:
+      - VIRTUAL_HOST=pinyo-club.localhost
+      - VIRTUAL_PORT=81
+      - NODE_ENV=development
+    ports:
+      - 81:81
+    volumes:
+      - ./:/app
+      - vscode-extensions-pc-frontend:/root/.vscode-server/extensions
+    networks:
+      - proxy
+volumes:
+  vscode-extensions-pc-frontend:
+networks:
+  proxy:
+    external: true
+    name: proxy_net
