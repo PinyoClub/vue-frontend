@@ -1,28 +1,25 @@
-<template>
-  <div class="hero min-h-screen bg-base-200">
-  <div class="hero-content text-center">
-    <div class="max-w-md">
-      <h1 class="text-5xl font-bold">{{ helloMessage }}</h1>
-      <div class="mockup-window border bg-base-300">
-        <div class="flex justify-center px-4 py-16 bg-base-200">Hello!</div>
-      </div>
-    </div>
-  </div>
-</div>
-</template>
+<script setup lang="ts">
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
+  import { useAuth0 } from '@auth0/auth0-vue';
+  const auth0 = useAuth0();
 
-  export default defineComponent({
-    name: 'App',
-    data() {
-      return {
-        helloMessage: 'Hello Scofield'
-      }
-    }
-  })
+  let isAuthenticated = auth0.isAuthenticated;
+
+  function login()  {
+    auth0.loginWithRedirect();
+  }
+
+  function logout() {
+    auth0.logout({ logoutParams: { returnTo: window.location.origin } });
+  }
 </script>
+
+<template>
+  <div v-if="isAuthenticated">
+    <button id="loginButton" @click="login()" class="btn btn-primary">Login</button>
+    <button v-if="isAuthenticated" id="logoutButton" @click="logout()" class="btn btn-secondary">Logout</button>
+  </div>
+</template>
 
 <style scoped>
 </style>
